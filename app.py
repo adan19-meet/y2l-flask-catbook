@@ -9,10 +9,14 @@ def catbook_home():
     cats = get_all_cats()
     return render_template("home.html", cats=cats)
 
-@app.route('/cats/<int:id>')
+@app.route('/cats/<int:id>',methods=['GET','POST'])
 def profile_page(id):
-	name = get_name(id)
-	return render_template("cat.html",n = id,name=name)
+	if request.method == 'GET':
+		name = get_name(id)
+		return render_template("cat.html",n = id,name=name)
+	else:
+		vote=get_vote(id)
+		return redirect('/')
 
 @app.route('/cats/createcat', methods=['GET','POST'])
 def create_cats():
@@ -20,8 +24,10 @@ def create_cats():
 		return render_template("form.html")
 	else:
 		name=request.form['firstname']
-		create_cat(name)
+		create_cat(name, 0)
 		return redirect('/')
+
+
 	
 
 
